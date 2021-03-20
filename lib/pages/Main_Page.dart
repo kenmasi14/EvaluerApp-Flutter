@@ -1,3 +1,4 @@
+import 'package:evaluer_app/pages/destination_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import '../Widget/horizontalView_item.dart';
@@ -34,7 +35,6 @@ class _MainPageState extends State<MainPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppBar(
@@ -47,16 +47,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.account_circle),
-                  onPressed: () {},
-                )
-              ],
+              
               elevation: 8,
               backgroundColor: Colors.black),
         ),
@@ -135,7 +126,7 @@ class _MainPageState extends State<MainPage> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
-                    return Center(child: Text('Loading Data'));
+                    return Center(child: CircularProgressIndicator());
                   return GridView.builder(
                       primary: false,
                       shrinkWrap: true,
@@ -156,41 +147,52 @@ class _MainPageState extends State<MainPage> {
 }
 
 Widget _locationListItem(BuildContext context, DocumentSnapshot document) {
+  Map<String, dynamic> data = document.data();
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(alignment: Alignment.center, children: [
-          Image.network(
-            document['imgURL'],
-            height: 240,
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-              bottom: 0,
-              child: Container(
-                //padding: EdgeInsets.only(top: 10, bottom: 10, right: 70, left: 70),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.05,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey[600],
-                ),
-                child: Center(
-                  child: Text(
-                    document['name'],
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+    child: GestureDetector(
+      onTap: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => ScreenBoard(
+                locationDocId: document.id, locationDocument: document),
+          )),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(alignment: Alignment.center, children: [
+            Image.network(
+              document['imgURL'],
+              height: 240,
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+                bottom: 0,
+                child: Container(
+                  //padding: EdgeInsets.only(top: 10, bottom: 10, right: 70, left: 70),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[600].withOpacity(0.8),
                   ),
-                ),
-              ))
-        ]),
+                  child: Center(
+                    child: Text(
+                      document['name'],
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                ))
+          ]),
+        ),
       ),
     ),
   );
 }
+
+

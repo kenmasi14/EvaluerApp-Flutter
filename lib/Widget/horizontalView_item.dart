@@ -1,5 +1,4 @@
 
-import 'package:evaluer_app/pages/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -11,7 +10,6 @@ class HorizontalViewList extends StatelessWidget {
                     width: 180,
                     child: GestureDetector(
                       onTap: (){
-                        Navigator.of(context).pushNamed(ScreenBoard.routeName);
                       },
                       child: Column(
                         children: <Widget>[
