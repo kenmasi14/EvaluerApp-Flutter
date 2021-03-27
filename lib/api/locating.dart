@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthenticanService {
+class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
 
-  AuthenticanService(this._firebaseAuth);
+  AuthenticationService(this._firebaseAuth);
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  Future<void> signOut() async{
+    await _firebaseAuth.signOut();
+  }
 
   Future<String> signIn({String email, String password}) async{
     try {
@@ -12,7 +16,7 @@ class AuthenticanService {
       return "Signed In";
       
     } on FirebaseAuthException catch (e) {
-      return 'Error Password';
+      return e.message;
     }
 
   }
@@ -20,7 +24,7 @@ class AuthenticanService {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       return "Signed Up";
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       return e.message;
     }
 

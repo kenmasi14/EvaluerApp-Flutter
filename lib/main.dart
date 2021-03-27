@@ -2,6 +2,7 @@ import 'package:evaluer_app/Widget/nav.dart';
 import 'package:evaluer_app/api/locating.dart';
 import 'package:evaluer_app/pages/Main_Page.dart';
 import 'package:evaluer_app/pages/login_page.dart';
+import 'package:evaluer_app/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,11 @@ class MyAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthenticanService>(
-          create: (_) => AuthenticanService(FirebaseAuth.instance),
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
           ),
-          StreamProvider(create: (context) => context.read<AuthenticanService>().authStateChanges)
+          StreamProvider(
+            create: (context) => context.read<AuthenticationService>().authStateChanges)
       ],
           child: MaterialApp(
         theme: ThemeData(
@@ -41,10 +43,10 @@ class AuthenticationWrapper extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
-    if (firebaseUser == null){
-      return Nav();
+    if (firebaseUser != null){
+      return UsersScreen();
     }
-    return Nav();
+      return Nav();
     
   }
 }

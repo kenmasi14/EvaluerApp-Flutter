@@ -8,14 +8,20 @@ class DetailScreen extends StatelessWidget {
   DetailScreen({
     this.locationID,
     this.locationDocument,
+    this.productId,
     String locationDocId,
   });
   String locationID;
+  final String productId;
 
   DocumentSnapshot locationDocument;
 
   @override
   Widget build(BuildContext context) {
+    final CollectionReference _productRef = FirebaseFirestore.instance
+        .collection('locationdata')
+        .doc(locationID)
+        .collection('restaurants');
     Map<String, dynamic> data = locationDocument.data();
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -100,7 +106,38 @@ class DetailScreen extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
+                      FutureBuilder(
+                        future: _productRef.doc(productId).get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          List imageList = locationDocument['restoCarousel'];
+                          return Container(
+                            height: 400,
+                            width: double.infinity,
+                            child: ListView(
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                Container(
+                                  height: 400,
+                                  child: PageView(
+                                    children: [
+                                      for (var i=0; i < imageList.length; i++)
+                                      Container(
+                                        child: Image.network("${imageList[i]}", fit: BoxFit.cover,)
+                                      )
+
+                                    ]
+                                  )
+                                  )
+                              ],
+
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

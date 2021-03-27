@@ -1,4 +1,7 @@
+import 'package:evaluer_app/api/locating.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersScreen extends StatelessWidget {
   @override
@@ -36,6 +39,35 @@ class UsersScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'My Account',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward)
+                  ],
+                )),
+          ),
+          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: FlatButton(
+                padding: EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                color: Color(0xFFF5F6F9),
+                onPressed: () {
+                  context.read<AuthenticationService>().signOut();
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.account_circle_rounded,
+                      size: 22,
+                      color: Colors.deepOrangeAccent,
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Text(
+                        'Log-Out',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                     ),

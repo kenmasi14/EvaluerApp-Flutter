@@ -51,6 +51,7 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password'
                   ),
@@ -75,9 +76,9 @@ class LoginPage extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                 child: RaisedButton(
                   onPressed: (){
-                    context.read<AuthenticanService>().signIn(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim(),
+                    context.read<AuthenticationService>().signIn(
+                      email: emailController.text,
+                      password: passwordController.text,
                     );  
                   },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(88.0)),
@@ -114,7 +115,7 @@ class LoginPage extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 40,),
                 child: RaisedButton(
                   onPressed: () => {
-                    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (context) => RegisterPage()))
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()))
                   },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(88.0)),
                   textColor: Colors.white,
