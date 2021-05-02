@@ -1,4 +1,5 @@
 import 'package:evaluer_app/Widget/background_login.dart';
+import 'package:evaluer_app/Widget/nav.dart';
 import 'package:evaluer_app/api/locating.dart';
 import 'package:evaluer_app/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,14 @@ class LoginPage extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
-                child: TextField(
+                child: TextFormField(
                   controller: emailController,
+                  validator: (value) {
+                    if (value.isEmpty){
+                      
+                      return 'Email: cannot be empty';
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: 'E-Mail Address'
                   ),
@@ -50,12 +57,18 @@ class LoginPage extends StatelessWidget {
                Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
-                child: TextField(
+                child: TextFormField(
                   controller: passwordController,
+                  validator: (value) {
+                    if (value.isEmpty){
+                      return 'Password: cannot be empty';
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: 'Password'
                   ),
                   obscureText: true,
+                  
                 ),
               ),
               Container(
@@ -79,7 +92,9 @@ class LoginPage extends StatelessWidget {
                     context.read<AuthenticationService>().signIn(
                       email: emailController.text,
                       password: passwordController.text,
-                    );  
+                    );
+                    
+                    
                   },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(88.0)),
                   textColor: Colors.white,

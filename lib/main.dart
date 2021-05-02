@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evaluer_app/Widget/nav.dart';
+import 'package:evaluer_app/api/authenticating.dart';
 import 'package:evaluer_app/api/locating.dart';
 import 'package:evaluer_app/pages/Main_Page.dart';
 import 'package:evaluer_app/pages/login_page.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +26,7 @@ class MyAppBar extends StatelessWidget {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
           ),
           StreamProvider(
-            create: (context) => context.read<AuthenticationService>().authStateChanges)
+            create: (context) => context.read<AuthenticationService>().authStateChanges, initialData: null,)
       ],
           child: MaterialApp(
         theme: ThemeData(
@@ -37,16 +40,4 @@ class MyAppBar extends StatelessWidget {
     );
   }
 
-}
-
-class AuthenticationWrapper extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User>();
-    if (firebaseUser != null){
-      return UsersScreen();
-    }
-      return Nav();
-    
-  }
 }

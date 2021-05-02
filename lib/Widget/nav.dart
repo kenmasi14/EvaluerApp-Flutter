@@ -5,6 +5,7 @@ import 'package:evaluer_app/pages/search_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:evaluer_app/api/locating.dart';
 
 class Nav extends StatefulWidget {
   Nav({Key key, SingleChildScrollView child}) : super(key: key);
@@ -15,14 +16,9 @@ class Nav extends StatefulWidget {
 
 class _NavState extends State<Nav> {
   int _selectedNav = 0;
-  List<Widget> _widgetOptions = <Widget>[
-    
-    MainPage(),
-    SearchPage(),
-    LoginPage(),
-    
+  List<Widget> _widgetOptions = <Widget>[];
 
-  ];
+
   void _onItemTap (int index) {
     setState(() {
       _selectedNav = index;
@@ -30,6 +26,12 @@ class _NavState extends State<Nav> {
   }
   @override
   Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User>();
+    _widgetOptions.insert(0, MainPage());
+    _widgetOptions.insert(1, SearchPage());
+    _widgetOptions.insert(2, firebaseUser !=null? UsersScreen() : LoginPage());
+      
+    
     
     return Scaffold(
          //child: _widgetOptions.elementAt(_selectedNav),
@@ -74,19 +76,22 @@ class _NavState extends State<Nav> {
     
  
   }
+
+
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
-  return {
+    final firebaseUser = context.watch<User>();
+    return {
     '/': (context){
       return [
-    MainPage(),
-    SearchPage(),
-    LoginPage(),
+      MainPage(),
+      SearchPage(),
+      firebaseUser !=null? UsersScreen() : LoginPage(),
       ].elementAt(index);
     }
   };
 }
 
-   Widget _buildOffstageNavigator(int index) {
+  Widget _buildOffstageNavigator(int index) {
   var routeBuilders = _routeBuilders(context, index);
 
   return Offstage(

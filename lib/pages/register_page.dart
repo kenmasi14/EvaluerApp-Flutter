@@ -1,8 +1,18 @@
+import 'dart:developer';
 import 'package:evaluer_app/Widget/background_login.dart';
-//import 'package:evaluer_app/pages/login_page.dart';
+import 'package:evaluer_app/api/database_connection.dart';
+import 'package:evaluer_app/api/locating.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:evaluer_app/main.dart';
 
 class RegisterPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +45,7 @@ class RegisterPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
+                  controller: fullNameController,
                   decoration: InputDecoration(
                     labelText: 'Full Name'
                   ),
@@ -46,7 +57,9 @@ class RegisterPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
+
                     labelText: 'E-Mail Address'
                   ),
                 ),
@@ -58,6 +71,7 @@ class RegisterPage extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 child: TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password'
                   ),
@@ -70,7 +84,23 @@ class RegisterPage extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                 child: RaisedButton(
-                  onPressed: (){},
+                  onPressed: ()  {
+                    context.read<AuthenticationService>().signUp(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      fname: fullNameController.text,
+
+                    ).then((value) async {
+                      User user = FirebaseAuth.instance.currentUser;
+                      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+                        'email': emailController,
+                        'password': passwordController.text,
+                        'fname': fullNameController.text,
+
+                      });
+                    });
+                    
+                  },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(88.0)),
                   textColor: Colors.white,
                   padding: const EdgeInsets.all(0),

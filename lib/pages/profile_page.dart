@@ -1,120 +1,116 @@
 import 'package:evaluer_app/api/locating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersScreen extends StatelessWidget {
+  const UsersScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(4, 9, 35, 1),
+                  Color.fromRGBO(39, 105, 171, 1),
+                ],
+                begin: FractionalOffset.bottomCenter,
+                end: FractionalOffset.topCenter),
+          ),
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          ProfilePic(),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: FlatButton(
-                padding: EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                color: Color(0xFFF5F6F9),
-                onPressed: () {},
-                child: Row(
-                  children: <Widget>[
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 45),
+              child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Icon(
-                      Icons.account_circle_rounded,
-                      size: 22,
-                      color: Colors.deepOrangeAccent,
+                      Icons.perm_identity_sharp,
+                      color: Colors.white,
                     ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: Text(
-                        'My Account',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward)
-                  ],
-                )),
-          ),
-          SizedBox(height: 5),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: FlatButton(
-                padding: EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                color: Color(0xFFF5F6F9),
-                onPressed: () {
-                  context.read<AuthenticationService>().signOut();
-                },
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.account_circle_rounded,
-                      size: 22,
-                      color: Colors.deepOrangeAccent,
-                    ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: Text(
-                        'Log-Out',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward)
-                  ],
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-class ProfilePic extends StatelessWidget {
-  const ProfilePic({
-    Key key,
-  }) : super(key: key);
+                    
+                    RaisedButton(
+                      color: Colors.transparent,
+                      child: Icon(
+                        Icons.logout,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        context.read<AuthenticationService>().signOut();
+                      },
+                    ),
+                    
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'My\n Profile',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: height * 0.43,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      double innerHeight = constraints.maxHeight;
+                      double innerWidth = constraints.maxWidth;
+                      return Stack(fit: StackFit.expand, children: <Widget>[
+                        Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                                height: innerHeight * 0.72,
+                                width: innerWidth,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 80),
+                                    Text(
+                                      'Name', 
+                                      style: TextStyle(
+                                        color: Color.fromRGBO(39, 105, 171, 1),
+                                        fontSize: 37,
+                                        ),
+                                        ),
+                                        SizedBox(height: 5,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CircleAvatar(
-            backgroundImage: AssetImage('assets/images/usersprofile.jpg'),
+                                          ],
+                                        )
+                                  ],
+                                ),
+                                ),
+                                
+                                )
+                      ]);
+                    },
+                  ),
+                )
+              ]),
+            ),
           ),
-          Positioned(
-            right: -12,
-            bottom: 0,
-            child: SizedBox(
-                height: 46,
-                width: 46,
-                child: FlatButton(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      side: BorderSide(color: Colors.white)),
-                  color: Color(0xFFF5F6F9),
-                  onPressed: () {},
-                  child: Icon(Icons.camera_alt_rounded),
-                )),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

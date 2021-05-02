@@ -5,7 +5,6 @@ import '../Widget/horizontalView_item.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -14,7 +13,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   @override
-
+  
   // ignore: override_on_non_overriding_member
   Widget imageCarousel = new Container(
     height: 225.0,
