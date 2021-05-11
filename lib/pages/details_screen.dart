@@ -1,6 +1,10 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evaluer_app/Widget/rating_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:rating_dialog/rating_dialog.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() => runApp(DetailScreen());
 
@@ -84,6 +88,19 @@ class DetailScreen extends StatelessWidget {
                         locationDocument['restoname'],
                         style: TextStyle(fontSize: 20, height: 1.5),
                       ),
+                      Container(
+                        child: SmoothStarRating(
+                          rating: 5.0,
+                          isReadOnly: false,
+                          size: 20,
+                          filledIconData: Icons.star,
+                          halfFilledIconData: Icons.star_half,
+                          defaultIconData: Icons.star_border,
+                          starCount: 5,
+                          allowHalfRating: true,
+                          spacing: 2.0,
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Text(
                         locationDocument['restodes'],
@@ -115,29 +132,99 @@ class DetailScreen extends StatelessWidget {
                           }
                           List imageList = locationDocument['restoCarousel'];
                           return Container(
-                            height: 400,
+                            height: 200,
                             width: double.infinity,
                             child: ListView(
                               physics: NeverScrollableScrollPhysics(),
                               children: [
                                 Container(
-                                  height: 400,
-                                  child: PageView(
-                                    children: [
-                                      for (var i=0; i < imageList.length; i++)
+                                  height: 200,
+                                  child: PageView(children: [
+                                    for (var i = 0; i < imageList.length; i++)
                                       Container(
-                                        child: Image.network("${imageList[i]}", fit: BoxFit.cover,)
-                                      )
-
-                                    ]
-                                  )
-                                  )
+                                          child: Image.network(
+                                        "${imageList[i]}",
+                                        fit: BoxFit.cover,
+                                      ))
+                                  ]),
+                                ),
                               ],
-
                             ),
                           );
                         },
                       ),
+                      SizedBox(height: 20),
+                      Container(
+                        width: 300,
+                        height: 7,
+                        decoration: BoxDecoration(
+                            color: Colors.red[50],
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'REVIEWS',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => RateMe()));
+                              },
+                              child: Text('Write a Review'),
+                              style: ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.orange)),
+                            ),
+                          ]
+                          ),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Text('UserName'.toUpperCase(),
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text('05-21-2018')
+                                ],
+                              ),
+                              SizedBox(height: 50),
+                              SmoothStarRating(
+                                rating: 5.0,
+                                    isReadOnly: true,
+                                    size: 20,
+                                    filledIconData: Icons.star,
+                                    halfFilledIconData: Icons.star_half,
+                                    defaultIconData: Icons.star_border,
+                                    starCount: 5,
+                                    allowHalfRating: true,
+                                    spacing: 2.0,
+                              ),
+
+                          ],
+                          ),
+                          Text('Tried their pizza and chicken pinyasarsa and I '
+                              'love it very very very much.'),
+                          
+                          SizedBox(height: 20),
+                          TextButton(onPressed: (){
+                            
+                              }, child: Text('VIEW ALL'))
+
+                        ]
+
+                      )
+
+                      
                     ],
                   ),
                 ),
@@ -147,5 +234,12 @@ class DetailScreen extends StatelessWidget {
         ));
       },
     );
+    
   }
+
+  
+
+  
+
+
 }

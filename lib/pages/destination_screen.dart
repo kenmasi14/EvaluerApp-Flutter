@@ -3,6 +3,7 @@ import 'package:evaluer_app/pages/details_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class OtherPage extends StatelessWidget {
   OtherPage({this.locationDocId});
@@ -17,7 +18,6 @@ class ScreenBoard extends StatelessWidget {
   ScreenBoard({this.locationDocId, this.locationDocument});
   String locationDocId;
   DocumentSnapshot locationDocument;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,11 @@ class ScreenBoard extends StatelessWidget {
 
                       return GestureDetector(
                         onTap: () => Navigator.push(
-                            context, CupertinoPageRoute(builder:(context) => DetailScreen(locationDocId: locationDocument.id, locationDocument:locationDocument))),
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => DetailScreen(
+                                    locationDocId: locationDocument.id,
+                                    locationDocument: locationDocument))),
                         child: Stack(
                           children: <Widget>[
                             Container(
@@ -110,7 +114,32 @@ class ScreenBoard extends StatelessWidget {
                                             maxLines: 2,
                                           ),
                                         ),
+                                        SizedBox(height: 20),
                                       ],
+                                    ),
+                                    Container(
+                                      child: SmoothStarRating(
+                                        rating: 5.0,
+                                        isReadOnly: true,
+                                        size: 20,
+                                        filledIconData: Icons.star_rounded,
+                                        halfFilledIconData:
+                                            Icons.star_half_rounded,
+                                        starCount: 5,
+                                        allowHalfRating: true,
+                                        spacing: 2.0,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Row(
+                                        //mainAxisAlignment:MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.location_on),
+                                          Text(locationDocument['restoMain'])
+
+                                          
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),

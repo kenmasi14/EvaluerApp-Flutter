@@ -30,6 +30,14 @@ class AuthenticationService {
     return (await _firebaseAuth.currentUser).uid;
   }
 
+  Future<dynamic> getData() async{
+    var docName = await getCurrentUserData();
+    var document = await FirebaseFirestore.instance.collection('users').doc(docName).get();
+    return document['name'];
+  }
+
+
+
   Future<String> signIn({String email, String password}) async{
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);

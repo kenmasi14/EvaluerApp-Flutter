@@ -80,24 +80,33 @@ class UsersScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(30),
                                   color: Colors.white,
                                 ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 80),
-                                    Text(
-                                      'Name', 
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(39, 105, 171, 1),
-                                        fontSize: 37,
-                                        ),
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
+                                child: FutureBuilder<dynamic>(
+                                  future: context.read<AuthenticationService>().getData(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData){
+                                      return Column(
+                                    children: [
+                                      SizedBox(height: 80),
+                                      Text(
+                                        snapshot.data, 
+                                        style: TextStyle(
+                                          color: Color.fromRGBO(39, 105, 171, 1),
+                                          fontSize: 37,
+                                          ),
+                                          ),
+                                          SizedBox(height: 5,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
 
-                                          ],
-                                        )
-                                  ],
+                                            ],
+                                          )
+                                    ],
+                                  );
+
+                                    }
+                                    return CircularProgressIndicator();
+                                  }
                                 ),
                                 ),
                                 
