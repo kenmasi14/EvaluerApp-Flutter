@@ -36,6 +36,7 @@ dependencies:
   fluttertoast: ^8.0.3
   smooth_star_rating: ^1.1.1
   rating_dialog: ^2.0.0
+  dropdownfield: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,14 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class RateMe extends StatelessWidget {
-  const RateMe({Key key}) : super(key: key);
+class RateMe extends StatefulWidget {
+  @override
+  _RateMe createState() => _RateMe();
+}
 
+class _RateMe extends State<RateMe> {
+  final TextEditingController reviewController = TextEditingController();
+  //const RateMe({Key key}) : super(key: key);
+  Icon likeActivated = Icon(Icons.thumb_up, size: 40, color: Colors.blue);
+  Icon likeDeactivated = Icon(Icons.thumb_up_outlined, size: 40);
+  Icon dislikeActivated = Icon(Icons.thumb_down, size: 40, color: Colors.red);
+  Icon dislikeDeactivated = Icon(Icons.thumb_down_outlined, size: 40);
+
+  String _dislike = "Hello";
+  var healthProtocols = {
+    'lbLike': Icon(Icons.thumb_up, size: 40, color: Colors.blue),
+    'lbDislike': Icon(Icons.thumb_down_outlined, size: 40),
+    'tcLike': Icon(Icons.thumb_up, size: 40, color: Colors.blue),
+    'tcDislike': Icon(Icons.thumb_down_outlined, size: 40),
+    'fmLike': Icon(Icons.thumb_up, size: 40, color: Colors.blue),
+    'fmDislike': Icon(Icons.thumb_down_outlined, size: 40),
+    'fsLike': Icon(Icons.thumb_up, size: 40, color: Colors.blue),
+    'fsDislike': Icon(Icons.thumb_down_outlined, size: 40),
+    'sdLike': Icon(Icons.thumb_up, size: 40, color: Colors.blue),
+    'sdDislike': Icon(Icons.thumb_down_outlined, size: 40),
+  };
+  var rating = {
+    'service': 0.0,
+    'food': 0.0,
+    'logbook': 1,
+    'temperatureCheck': 1,
+    'faceMask': 1,
+    'faceShield': 1,
+    'socialDistancing': 1
+  };
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-              child: Stack(children: [
+        child: Stack(children: [
           Column(
             children: [
               Container(
@@ -21,7 +56,7 @@ class RateMe extends StatelessWidget {
                     )),
               ),
               Text(
-                'Youre Opinion matter to us',
+                'Your opinion matters to us!',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
               )
             ],
@@ -59,20 +94,23 @@ class RateMe extends StatelessWidget {
                   Container(
                     child: Column(children: [
                       Text(
-                        'How was their Food ?',
+                        'How was their food?',
                         style: TextStyle(fontSize: 25),
                       ),
                       SizedBox(height: 5),
                       SmoothStarRating(
-                        rating: 5.0,
+                        rating: 0.0,
                         isReadOnly: false,
-                        size: 20,
+                        size: 40,
                         filledIconData: Icons.star,
                         halfFilledIconData: Icons.star_half,
                         defaultIconData: Icons.star_border,
                         starCount: 5,
                         allowHalfRating: true,
                         spacing: 2.0,
+                        onRated: (v) => setState(() {
+                          rating["food"] = v;
+                        }),
                       ),
                       SizedBox(height: 15),
                       Text(
@@ -83,13 +121,16 @@ class RateMe extends StatelessWidget {
                       SmoothStarRating(
                         rating: 5.0,
                         isReadOnly: false,
-                        size: 20,
+                        size: 40,
                         filledIconData: Icons.star,
                         halfFilledIconData: Icons.star_half,
                         defaultIconData: Icons.star_border,
                         starCount: 5,
                         allowHalfRating: true,
                         spacing: 2.0,
+                        onRated: (v) => setState(() {
+                          rating["service"] = v;
+                        }),
                       ),
                       SizedBox(height: 15),
                       Text('Health Protocol Compliance'),
@@ -97,129 +138,182 @@ class RateMe extends StatelessWidget {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('LogBook                   '),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_up_alt_outlined,
-                              defaultIconData: Icons.thumb_up,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
+                            Text(
+                              _dislike,
+                              style: TextStyle(fontSize: 16),
                             ),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_down_alt_outlined,
-                              defaultIconData: Icons.thumb_down,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
+                            IconButton(
+                              icon: healthProtocols["lbLike"],
+                              onPressed: () => setState(() {
+                                if (rating["logbook"] == 1) {
+                                  healthProtocols["lbLike"] = likeDeactivated;
+                                  healthProtocols["lbDislike"] =
+                                      dislikeActivated;
+                                  rating["logbook"] = 0;
+                                } else {
+                                  healthProtocols["lbLike"] = likeActivated;
+                                  healthProtocols["lbDislike"] =
+                                      dislikeDeactivated;
+                                  rating["logbook"] = 1;
+                                }
+                              }),
                             ),
-                          ]
-                          ),
-                          Row(
+                            IconButton(
+                              icon: healthProtocols['lbDislike'],
+                              onPressed: () => setState(() {
+                                if (rating["logbook"] == 1) {
+                                  healthProtocols["lbLike"] = likeDeactivated;
+                                  healthProtocols["lbDislike"] =
+                                      dislikeActivated;
+                                  rating["logbook"] = 0;
+                                } else {
+                                  healthProtocols["lbLike"] = likeActivated;
+                                  healthProtocols["lbDislike"] =
+                                      dislikeDeactivated;
+                                  rating["logbook"] = 1;
+                                }
+                              }),
+                            )
+                          ]),
+                      Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Temperature Check'),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_up_alt_outlined,
-                              defaultIconData: Icons.thumb_up,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
+                            IconButton(
+                              icon: healthProtocols["tcLike"],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
                             ),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_down_alt_outlined,
-                              defaultIconData: Icons.thumb_down,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
-                            ),
-                          ]
-                          ),
-                          Row(
+                            IconButton(
+                              icon: healthProtocols['tcDislike'],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
+                            )
+                          ]),
+                      Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Face Mask                '),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_up_alt_outlined,
-                              defaultIconData: Icons.thumb_up,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
+                            Text('Face Mask'),
+                            IconButton(
+                              icon: healthProtocols["tcLike"],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
                             ),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_down_alt_outlined,
-                              defaultIconData: Icons.thumb_down,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
-                            ),
-                          ]
-                          ),
-                          Row(
+                            IconButton(
+                              icon: healthProtocols['tcDislike'],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
+                            )
+                          ]),
+                      Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Social Distancing     '),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_up_alt_outlined,
-                              defaultIconData: Icons.thumb_up,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
+                            Text('Social Distancing'),
+                            IconButton(
+                              icon: healthProtocols["tcLike"],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
                             ),
-                            SmoothStarRating(
-                              rating: 1.0,
-                              isReadOnly: false,
-                              size: 40,
-                              filledIconData: Icons.thumb_down_alt_outlined,
-                              defaultIconData: Icons.thumb_down,
-                              starCount: 1,
-                              allowHalfRating: true,
-                              spacing: 2.0,
-                            ),
-                          ]
-                          ),
-                          SizedBox(height: 25),
-                          Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.symmetric(horizontal: 40),
-                            child: Column(children: [
+                            IconButton(
+                              icon: healthProtocols['tcDislike'],
+                              onPressed: () => setState(() {
+                                if (rating["temperatureCheck"] == 1) {
+                                  healthProtocols["tcLike"] = likeDeactivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeActivated;
+                                  rating["temperatureCheck"] = 0;
+                                } else {
+                                  healthProtocols["tcLike"] = likeActivated;
+                                  healthProtocols["tcDislike"] =
+                                      dislikeDeactivated;
+                                  rating["temperatureCheck"] = 1;
+                                }
+                              }),
+                            )
+                          ]),
+                      SizedBox(height: 25),
+                      Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            children: [
                               Center(
                                 child: Text('Write a Message'),
-                                
                               ),
-                              TextFormField(),
+                              TextFormField(
+                                controller: reviewController,
 
-                            ],)
-                          ),
-                          SizedBox(height: 25),
-
-                          Container(
-                            width: double.infinity,
-                            height: 30,
-                            color: Colors.blue,
-                            child: RaisedButton(onPressed: () {  }, color: Colors.black,
-                            child: Text('Submit here', style: TextStyle(color: Colors.white),),)
-                          )
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 25),
+                      Container(
+                          width: double.infinity,
+                          height: 30,
+                          color: Colors.blue,
+                          child: RaisedButton(
+                            onPressed: () {},
+                            color: Colors.black,
+                            child: Text(
+                              'Submit here',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ))
                     ]),
                   )
                 ],
